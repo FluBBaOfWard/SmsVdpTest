@@ -1,0 +1,78 @@
+VDP Test to-do.
+------------------------------
+
+
+HCounter test:
+	The HCounter value from io port $7F should be constant in normal conditions?
+	Maybe they are free running when the TH pin is 0 and latched when TH pin is 1?
+	Setting the TH pin to 0 and then 1 will latch the current HCounter value,
+	this can be done from the actual joystick port or from software by changing
+	port $3F.
+	The values are the HClock (-47 -> 294) divided by 2
+	The values are the MClock (0 -> 683)-94 divided by 4.
+
+
+
+274 + (108*3) = 598
+
+VINT occur at HClock -18 (HCount 0xF3), -14 (Hcount 0xF6) on MD.
+HINT occur at HClock -17 (HCount 0xF3), -13 (Hcount 0xF6) on MD.
+NMI occur at HClock -16 (HCount 0xF4).
+VCount change at HClock -16 (HCount 0xF4), -13 (HCount 0xF6) on MD.
+VINT flag is set at HClock -15 (HCount 0xF5). -13 (HCount 0xF6) on MD.
+OVR flag is set at HClock -15 (HCount 0xF5). -13 (HCount 0xF6) on MD.
+COL flag is set at the pixel it occurs on SMS. -13 (HCount 0xFF) on MD.
+XScroll is latched between HClock -18 & -17 (HCount 0xF3). HClock -15 & -14 (HCount 0xF5 & 0xF6) on MD.
+
+NameTable base is not latched, it's updated through out the scanline.
+
+Screen on/off is not latched, it's updated through out the scanline.
+Turning the screen off is immediate and the border color is shown instead of
+normal graphics, turning it on gives normal background color but graphics is
+not shown until the next scanline.
+
+ScreenMode switching is not latched, it's updated through out the scanline.
+Seems to behave a bit like screen on/off.
+
+
+Test on hardware:
+-----------------
+VDP status bits, do sprites affect them, can it be zero if no sprites are shown?
+SpriteAttributeTable latch timing.
+SpritePatternTable latch timing.
+YScroll latch timing.
+YScroll values between 224 & 255. (Same as 0-31).
+Test opcode CPU cycles (through HClock) and MEM cycles (R register).
+
+Switch between 192 & 224/240 mode mid-screen.
+Can sprites collide with the left most border on MD?
+
+
+Test all IO ports and memory. Check direction of all TH & TL bits of joyport.
+VRAM speed test?
+Make the MD palette test setup the tilemap address correctly.
+VDP statuses on MD in mode4? Odd frame, Vertical blanking, Horizontal blanking, DMA in progress, PAL mode flag.
+
+Kolla hur SMS1 VDPn beter sig i mode 2 läge.
+	Kan man scrolla skärmen? Nej.
+	Kan man läsa av vilken raster rad man är på? Ja.
+	Kan man sätta på lineIRQ? Ja.
+	Kan man skriva till palletten i mode0/2, och det slår igenom när man byter tillbaka till mode4? Ja.
+
+ändras adressen alltid när man skriver till ett register? Ja.
+ändras adressen om man bara skriver en byte? ändras CRAM write adressen också? Ja.
+ändras vram read-buffer om man skriver till VRAM o CRAM? Ja.
+Adressen ändras inte på MD om man bara skriver en byte. Nope.
+
+Check what is returned if you turn off RAM memory on SMS1... last byte of instruction reading memory.
+
+Mode 5 tests:
+-------------
+How does autoincrement value affect VRAM, CRAM & VSRAM? Read/Write?
+
+
+
+
+
+
+
